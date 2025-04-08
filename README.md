@@ -17,10 +17,22 @@
 ### 5. npm i @compodoc/compodoc latest
 
 ### 6. npm install bcrypt jsonwebtoken
+
 #### npm install --save-dev @types/bcrypt @types/jsonwebtoken
 
 ### 7.npm install @nestjs/jwt
 
+### 8.npm i typeorm-extension @faker-js/faker
+
+### Used to seed data in TypeORM
+
+### 9.npm install @nestjs/passport passport passport-jwt @nestjs/jwt
+
+### 9. 1 npm install --save-dev @types/passport-jwt
+
+### Used to protect controller
+
+### 10. npm install --save @nestjs/platform-express multer
 
 # How to connect Nest.js to PostgreSQL with TypeORM
 

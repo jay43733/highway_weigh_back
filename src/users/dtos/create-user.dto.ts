@@ -30,9 +30,6 @@ export class CreateUserDto {
   @IsEmail({}, { message: 'Please input email format' })
   @MaxLength(96)
   @IsNotEmpty()
-  // @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, {
-  //   message: 'Please input email format.',
-  // })
   email: string;
 
   @ApiProperty({

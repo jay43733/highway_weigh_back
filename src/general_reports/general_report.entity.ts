@@ -18,31 +18,31 @@ export class GeneralReport {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', {
+  @Column('nvarchar', {
     length: 512,
     nullable: false,
   })
   name: string;
 
-  @Column('text', {
+  @Column('nvarchar', {
+    length: 'max',
     nullable: false,
   })
   detail: string;
 
-  @Column('bytea', { nullable: false })
-  image: Buffer;
+  @Column('nvarchar', { nullable: true, length: 255 })
+  image: string;
 
-  @Column('enum', { enum: IssueType, nullable: false })
+  @Column('int', { nullable: false })
   issue_type: IssueType;
 
   @Column('text', { nullable: true })
   comment?: string;
 
-  @Column('boolean', { nullable: false, default: true })
+  @Column('bit', { nullable: false, default: true })
   is_active: boolean;
 
-  @Column('enum', {
-    enum: GeneralReportStatus,
+  @Column('int', {
     default: GeneralReportStatus.PENDING,
     nullable: false,
   })
@@ -58,7 +58,6 @@ export class GeneralReport {
   @JoinColumn({ name: 'who_edited_by_user_id' })
   who_edited?: number;
 
-  //For displaying who edited i can get from this field and no need to load the relation
   @Column('int', { nullable: true })
   who_edited_by_user_id?: number;
 

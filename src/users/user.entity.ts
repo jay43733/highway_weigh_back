@@ -8,14 +8,14 @@ export class User {
   id: number;
 
   @Column({
-    type: 'varchar',
+    type: 'nvarchar',
     length: 512,
     nullable: false,
   })
   name: string;
 
   @Column({
-    type: 'varchar',
+    type: 'nvarchar',
     length: 96,
     nullable: false,
     unique: true,
@@ -23,21 +23,20 @@ export class User {
   email: string;
 
   @Column({
-    type: 'varchar',
+    type: 'nvarchar',
     length: 60,
     nullable: false,
   })
   password: string;
   @Column({
-    type: 'varchar',
+    type: 'nvarchar',
     length: 10,
     nullable: true,
   })
   phone_number: string;
 
   @Column({
-    type: 'enum',
-    enum: Role,
+    type: 'int',
     nullable: false,
   })
   role: Role;

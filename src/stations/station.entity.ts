@@ -6,7 +6,7 @@ export class Station {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', {
+  @Column('nvarchar', {
     length: 96,
     nullable: false,
   })
