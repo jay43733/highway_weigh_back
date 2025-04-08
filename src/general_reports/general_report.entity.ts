@@ -65,7 +65,7 @@ export class GeneralReport {
   @JoinColumn({ name: 'who_created_by_user_id' })
   who_created: User;
 
-  @ManyToOne(() => Station)
+  @ManyToOne(() => Station, { eager: true })
   @JoinColumn({ name: 'station_id' })
   station: Station;
 }

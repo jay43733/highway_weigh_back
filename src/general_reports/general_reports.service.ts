@@ -5,8 +5,8 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { CreateGeneralReportDto } from './dto/create-general_report.dto';
-import { UpdateGeneralReportDto } from './dto/update-general_report.dto';
+import { CreateGeneralReportDto } from './dtos/create-general_report.dto';
+import { UpdateGeneralReportDto } from './dtos/update-general_report.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GeneralReport } from './general_report.entity';
 import { Repository } from 'typeorm';
@@ -24,8 +24,8 @@ export class GeneralReportsService {
   ) {}
 
   public async createReport(
-    @Req() req,
-    @Body() createGeneralReportDto: CreateGeneralReportDto,
+    req,
+    createGeneralReportDto: CreateGeneralReportDto,
     imageFile: string,
   ) {
     const station = await this.stationRepo.findOne({
@@ -56,15 +56,45 @@ export class GeneralReportsService {
     return generalReports;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} generalReport`;
-  }
+  public async updateReport(
+    req,
+    id: number,
+    updateGeneralReportDto: UpdateGeneralReportDto,
+    imageFile: string,
+  ) {
+    const checkReportExisted = await this.reportRepo.findOne({
+      where: {
+        id: id,
+      },
+    });
 
-  update(id: number, updateGeneralReportDto: UpdateGeneralReportDto) {
-    return `This action updates a #${id} generalReport`;
-  }
+    if (!checkReportExisted) {
+      throw new NotFoundException('General Report not found');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} generalReport`;
+    if (imageFile) {
+      const updateReport = {
+        ...checkReportExisted,
+        ...updateGeneralReportDto,
+        who_edited_by_user_id: req.user.userId,
+        image: imageFile,
+        station: {
+          id: updateGeneralReportDto.station_id,
+        },
+      };
+
+      return await this.reportRepo.save(updateReport);
+    } else {
+      const updateReport = {
+        ...checkReportExisted,
+        ...updateGeneralReportDto,
+        who_edited_by_user_id: req.user.userId,
+        station: {
+          id: updateGeneralReportDto.station_id,
+        },
+      };
+
+      return await this.reportRepo.save(updateReport);
+    }
   }
 }
