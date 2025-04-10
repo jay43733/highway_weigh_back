@@ -61,7 +61,7 @@ export class GeneralReport {
   @Column('int', { nullable: true })
   who_edited_by_user_id?: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @JoinColumn({ name: 'who_created_by_user_id' })
   who_created: User;
 

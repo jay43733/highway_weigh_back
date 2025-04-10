@@ -10,6 +10,8 @@ import { ConfigModule } from '@nestjs/config';
 import { User } from './users/user.entity';
 import { Station } from './stations/station.entity';
 import { GeneralReport } from './general_reports/general_report.entity';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { GeneralReport } from './general_reports/general_report.entity';
       isGlobal: true,
     }),
     UsersModule,
+
+    // TypeORM
     TypeOrmModule.forRootAsync({
       imports: [],
       inject: [],
@@ -24,7 +28,6 @@ import { GeneralReport } from './general_reports/general_report.entity';
         type: 'mssql',
         autoLoadEntities: true,
         synchronize: true,
-        // dropSchema: true,
         port: 26433,
         username: 'nwlproduction',
         password: 'Nwl!2563789!',
@@ -39,6 +42,12 @@ import { GeneralReport } from './general_reports/general_report.entity';
     StationsModule,
     GeneralReportsModule,
     AuthsModule,
+
+    // Create url from image in local folder to send it back to frontend
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'general_reports/uploads'),
+      serveRoot: '/uploads',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
