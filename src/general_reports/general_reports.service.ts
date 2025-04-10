@@ -45,6 +45,9 @@ export class GeneralReportsService {
       image: imageFile,
       station: {
         id: createGeneralReportDto.station_id,
+        name: station.name,
+        lat: station.lat,
+        long: station.long,
       },
       who_created: req.user.userId,
     });
@@ -72,6 +75,16 @@ export class GeneralReportsService {
       throw new NotFoundException('General Report not found');
     }
 
+    const findStation = await this.stationRepo.findOne({
+      where: {
+        id: updateGeneralReportDto.station_id || checkReportExisted.station.id,
+      },
+    });
+
+    if (!findStation) {
+      throw new NotFoundException('Station not found');
+    }
+
     if (imageFile) {
       const updateReport = {
         ...checkReportExisted,
@@ -79,18 +92,26 @@ export class GeneralReportsService {
         who_edited_by_user_id: req.user.userId,
         image: imageFile,
         station: {
-          id: updateGeneralReportDto.station_id,
+          id: updateGeneralReportDto.station_id || findStation.id,
+          name: findStation.name,
+          lat: findStation.lat,
+          long: findStation.long,
         },
       };
 
-      return await this.reportRepo.save(updateReport);
+      const result = await this.reportRepo.save(updateReport);
+
+      return result;
     } else {
       const updateReport = {
         ...checkReportExisted,
         ...updateGeneralReportDto,
         who_edited_by_user_id: req.user.userId,
         station: {
-          id: updateGeneralReportDto.station_id,
+          id: updateGeneralReportDto.station_id || findStation.id,
+          name: findStation.name,
+          lat: findStation.lat,
+          long: findStation.long,
         },
       };
 

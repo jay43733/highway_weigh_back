@@ -34,6 +34,12 @@
 
 ### 10. npm install --save @nestjs/platform-express multer
 
+### 11.npm install @nestjs/serve-static
+
+### 11.1 npm install --save-dev @types/serve-static
+
+### Used to create url from image in local folder
+
 # How to connect Nest.js to PostgreSQL with TypeORM
 
 ### 1. npm i typeorm latest
