@@ -12,6 +12,7 @@ import { Station } from './stations/station.entity';
 import { GeneralReport } from './general_reports/general_report.entity';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { MainReportsModule } from './main_reports/main_reports.module';
 
 @Module({
   imports: [
@@ -48,6 +49,8 @@ import { join } from 'path';
       rootPath: join(__dirname, '..', 'general_reports/uploads'),
       serveRoot: '/uploads',
     }),
+
+    MainReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
