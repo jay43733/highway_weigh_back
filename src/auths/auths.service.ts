@@ -34,7 +34,7 @@ export class AuthsService {
     console.log('Login.....');
     const user = await this.validateUser(loginDto.email, loginDto.password);
     console.log('payload.....');
-    const payload = { name: user.name, user_id: user.id, role: user.role };
+    const payload = { name: user.name, id: user.id, role: user.role };
     const token = this.jwtService.sign(payload);
     console.log('Token.....');
     const response = { token: token, payload: payload };

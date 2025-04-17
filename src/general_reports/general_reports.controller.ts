@@ -10,6 +10,7 @@ import {
   BadRequestException,
   UploadedFile,
   Req,
+  NotFoundException,
 } from '@nestjs/common';
 import { GeneralReportsService } from './general_reports.service';
 import { CreateGeneralReportDto } from './dtos/create-general_report.dto';
@@ -18,11 +19,15 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { UsersService } from 'src/users/providers/users.service';
 
 @Controller('general_reports')
 @UseGuards(AuthGuard('jwt'))
 export class GeneralReportsController {
-  constructor(private readonly generalReportsService: GeneralReportsService) {}
+  constructor(
+    private readonly generalReportsService: GeneralReportsService,
+    private readonly userService: UsersService,
+  ) {}
 
   @Post()
   @UseInterceptors(
@@ -54,6 +59,12 @@ export class GeneralReportsController {
     if (!image) {
       throw new BadRequestException('Image file is required');
     }
+
+    console.log(req.user.userId)
+    const user = await this.userService.findUserById(req.user.userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const newReport = await this.generalReportsService.createReport(
       req,
@@ -64,6 +75,11 @@ export class GeneralReportsController {
     const result = {
       ...newReport,
       imageUrl: `${baseUrl}/uploads/${newReport.image}`,
+      who_created: {
+        id: user?.id,
+        name: user?.name,
+        role: user?.role,
+      },
     };
 
     return result;
@@ -90,6 +106,7 @@ export class GeneralReportsController {
       who_created: item.who_created
         ? {
             id: item.who_created.id,
+            name: item.who_created.name,
             role: item.who_created.role,
           }
         : null,
@@ -149,6 +166,7 @@ export class GeneralReportsController {
       who_created: updateReport.who_created
         ? {
             id: updateReport.who_created.id,
+            name: updateReport.name,
             role: updateReport.who_created.role,
           }
         : null,
